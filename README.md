@@ -1,9 +1,11 @@
-## Como executar localmente
+# ⛅ Painel do Clima - Atividade 2
 
-1. Clone o repositório: git clone https://github.com/danielalmeidapereira22-png/GitHub-page.git
-2. Abra o arquivo index.html no navegador.
+Aplicação web interativa para consulta de clima em tempo real e gestão de cidades favoritas, integrada com **Supabase** e empacotada com **Docker**.
 
-## Links
+## 🚀 Como Executar com Docker
 
-- **Aplicação no ar (GitHub Pages):** https://danielalmeidapereira22-png.github.io/GitHub-page/
-- **Repositório:** https://github.com/danielalmeidapereira22-png/GitHub-page
+### 1. Baixar e executar a imagem
+Para rodar a aplicação via Docker, execute o seguinte comando no terminal:
+
+```bash
+docker run -d -p 8080:80 --name painel-clima danielalmeida22/bootcamp2-app:1.0
