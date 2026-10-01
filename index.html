@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Clima</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Biblioteca Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="container">
@@ -21,26 +23,24 @@
 
     <div id="secao-favoritos" style="margin-top: 20px;">
       <h2>Meus Favoritos</h2>
-      <button id="btn-favoritar" style="display: none;">Favoritar esta cidade</button>
+      <button id="btn-favoritar" style="display: none; margin-bottom: 10px;">Favoritar esta cidade</button>
       <ul id="lista-favoritos"></ul>
     </div>
   </div>
 
   <script src="script.js"></script>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
+  <script>
     const SUPABASE_URL = "https://oeckyjkklkioerzqzqm.supabase.co";
     const SUPABASE_KEY = "sb_publishable_7K5Nq7AhHgcqrjGovbgf9Q_Tyz-aBYz";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let cidadeAtual = "";
     let climaAtual = "";
 
     async function listarFavoritos() {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('favoritos')
         .select('*')
         .order('created_at', { ascending: false });
@@ -51,6 +51,7 @@
       }
 
       const listaEl = document.getElementById('lista-favoritos');
+      if (!listaEl) return;
       listaEl.innerHTML = '';
 
       data.forEach(item => {
@@ -67,7 +68,7 @@
     async function salvarFavorito() {
       if (!cidadeAtual) return;
 
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('favoritos')
         .insert([{ nome_item: cidadeAtual, dados_extra: climaAtual }]);
 
@@ -79,7 +80,7 @@
     }
 
     window.removerFavorito = async function(id) {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('favoritos')
         .delete()
         .eq('id', id);
