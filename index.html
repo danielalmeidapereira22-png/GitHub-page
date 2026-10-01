@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Clima</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Biblioteca Supabase -->
+  <!-- Conexao com Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -23,84 +23,11 @@
 
     <div id="secao-favoritos" style="margin-top: 20px;">
       <h2>Meus Favoritos</h2>
-      <button id="btn-favoritar" style="display: none; margin-bottom: 10px;">Favoritar esta cidade</button>
+      <button id="btn-favoritar" style="display: none; margin-bottom: 10px;">⭐ Favoritar esta cidade</button>
       <ul id="lista-favoritos"></ul>
     </div>
   </div>
 
   <script src="script.js"></script>
-
-  <script>
-    const SUPABASE_URL = "https://oeckyjkklkioerzqzqm.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_7K5Nq7AhHgcqrjGovbgf9Q_Tyz-aBYz";
-
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    let cidadeAtual = "";
-    let climaAtual = "";
-
-    async function listarFavoritos() {
-      const { data, error } = await supabaseClient
-        .from('favoritos')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error("Erro ao buscar favoritos:", error);
-        return;
-      }
-
-      const listaEl = document.getElementById('lista-favoritos');
-      if (!listaEl) return;
-      listaEl.innerHTML = '';
-
-      data.forEach(item => {
-        const li = document.createElement('li');
-        li.style.margin = "8px 0";
-        li.innerHTML = `
-          <strong>${item.nome_item}</strong> (${item.dados_extra || 'Sem dados'})
-          <button onclick="removerFavorito(${item.id})" style="margin-left: 10px; color: red;">Excluir</button>
-        `;
-        listaEl.appendChild(li);
-      });
-    }
-
-    async function salvarFavorito() {
-      if (!cidadeAtual) return;
-
-      const { error } = await supabaseClient
-        .from('favoritos')
-        .insert([{ nome_item: cidadeAtual, dados_extra: climaAtual }]);
-
-      if (error) {
-        alert("Erro ao favoritar: " + error.message);
-      } else {
-        listarFavoritos();
-      }
-    }
-
-    window.removerFavorito = async function(id) {
-      const { error } = await supabaseClient
-        .from('favoritos')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        alert("Erro ao remover: " + error.message);
-      } else {
-        listarFavoritos();
-      }
-    };
-
-    document.getElementById('btn-favoritar').addEventListener('click', salvarFavorito);
-    window.addEventListener('DOMContentLoaded', listarFavoritos);
-
-    window.atualizarCidadeAtual = function(nome, dados) {
-      cidadeAtual = nome;
-      climaAtual = dados;
-      const btn = document.getElementById('btn-favoritar');
-      if (btn) btn.style.display = 'inline-block';
-    };
-  </script>
 </body>
 </html>
