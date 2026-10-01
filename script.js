@@ -28,7 +28,10 @@ async function buscarDados(cidade) {
       <p><strong>Vento:</strong> ${clima.windspeed} km/h</p>
       <p><strong>Direção do Vento:</strong> ${clima.winddirection}°</p>
     `;
-
+    // Ativa o botão de favoritar no Supabase para esta cidade
+    if (window.atualizarCidadeAtual) {
+     window.atualizarCidadeAtual(name, `${clima.temperature}°C - Vento: ${clima.windspeed} km/h`);
+}
   } catch (erro) {
     // Tratamento de erro amigável
     area.innerHTML = "<p class='erro'>⚠️️ Cidade não encontrada. Tente digitar novamente.</p>";
