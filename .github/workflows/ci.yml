@@ -1,0 +1,26 @@
+name: CI - Testes Automatizados
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Jest e Rodar Testes
+        run: |
+          npm init -y
+          npm install jest --save-dev
+          npx jest utils.test.js
